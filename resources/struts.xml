@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+    <constant name="struts.devMode" value="true" />
+    <constant name="struts.ui.theme" value="simple" />
+    <package name="default" namespace="/" extends="struts-default">
+    	<!-- 自定义拦截器 -->
+    	<interceptors>
+    		<interceptor name="loginInterceptor" class="pan.erp.utils.interceptor.LoginInterceptor"></interceptor>
+    		<interceptor-stack name="systemStack">
+    			<!-- 调用自定义拦截器 -->
+    			<!-- 调用系统默认拦截器 -->
+    			<interceptor-ref name="loginInterceptor"/>
+    			<interceptor-ref name="defaultStack"/>
+    		</interceptor-stack>
+    	</interceptors>
+    	<default-interceptor-ref name="systemStack"/>
+    	<!-- 定义全局返回 -->
+		<global-results>
+			<result name="noLogin">/WEB-INF/jsps/login.jsp</result>
+		</global-results>    	
+    	<action name="login" class="com.opensymphony.xwork2.ActionSupport">
+    		<result>/WEB-INF/jsps/login.jsp</result>
+    	</action>
+    	<!-- 配置action -->
+    	<action name="emp_*" class="empAction" method="{1}">
+    		<result name="loginSuccess">/WEB-INF/jsps/main.jsp</result>
+    		<result name="loginFail">/WEB-INF/jsps/login.jsp</result>
+    		<result name="logoutSuccess" >/WEB-INF/jsps/login.jsp</result>
+    		<result name="list">/WEB-INF/jsps/emp/list.jsp</result>
+    		<result name="input">/WEB-INF/jsps/emp/input.jsp</result>
+    		<result name="tolist" type="redirectAction">emp_list</result>
+    		<result name="toChengePwdPage">/WEB-INF/jsps/emp/changePwd.jsp</result>
+    		<result name="changePwdFail">/WEB-INF/jsps/emp/changePwd.jsp</result>
+    	</action>
+    	<action name="page_*">
+    		<result>/WEB-INF/jsps/{1}.jsp</result>
+    	</action>
+    	<action name="dep_*" class="depAction" method="{1}">
+    		<result name="list">/WEB-INF/jsps/dep/list.jsp</result>
+    		<result name="input">/WEB-INF/jsps/dep/input.jsp</result>
+    		<result name="tolist" type="redirectAction">dep_list</result>
+    	</action>
+    </package>
+    
+</struts>
